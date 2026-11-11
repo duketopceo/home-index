@@ -5,8 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "home-index"
 version = "0.1.0"
-description = "Local-first file index for ~ (omarchy-max)."
+description = "Local-first file index for your home directory."
 requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "duketopceo" }]
 dependencies = []
 
 [tool.hatch.build.targets.wheel]

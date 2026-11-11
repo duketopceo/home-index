@@ -18,10 +18,13 @@ python3 index.py --llm --yes      # skip confirmation prompt
 
 | Lane | Path |
 |---|---|
-| Work (Bartlett) | `~/Work/bartlett/` |
-| Personal (duketopceo) | `~/Projects/duketopceo/` |
-| Agents | `~/Agents/` |
-| Apps (do not move) | `~/Applications/`, `~/bin/`, `~/.local/share/*` |
+Lanes are auto-detected (first child of `~/Work/` and `~/Projects/`, plus
+`~/Agents/`, `~/Pictures/Screenshots/`, and `~/.config/omarchy/` when present).
+No usernames, orgs, or host paths are hardcoded. Output paths are home-relative.
+
+## License
+
+MIT. See `LICENSE`.
 
 ## Privacy
 

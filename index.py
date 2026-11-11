@@ -19,20 +19,36 @@ HOME = Path.home()
 OUT_MD = Path(__file__).resolve().parent / "INDEX.md"
 OUT_JSON = Path(__file__).resolve().parent / "index.json"
 
+# Directories skipped wholesale: caches, session-internal state whose
+# directory names embed the local username and leak it into the output.
 IGNORED = {
     ".cache", ".cargo", "Steam", "node_modules", ".venv", "venv",
     "__pycache__", ".git", "dayflow", ".npm", ".rustup",
     ".bun", ".var", ".mozilla", ".vscode", ".steam", ".ollama",
     "pnpm", "mise", ".local/share/pnpm", ".local/share/mise",
     ".local/share/Steam", "Library", "Pictures/Screenshots/Library",
+    ".claude/projects", ".cursor/projects", ".factory/sessions",
+    ".gemini/history", ".grok/memory", ".grok/memory-v2", ".hermes/skills",
 }
 MAX_DEPTH = 4
-LANES = {
-    "Work (Bartlett)": HOME / "Work" / "bartlett",
-    "Personal (duketopceo)": HOME / "Projects" / "duketopceo",
-    "Agents": HOME / "Agents",
-    "Screenshots": HOME / "Pictures" / "Screenshots",
-}
+
+
+def detect_lanes() -> dict[str, Path]:
+    """Auto-detect lanes from the local layout (no hardcoded names)."""
+    lanes: dict[str, Path] = {}
+    for label, tail in (("Work", HOME / "Work"), ("Projects", HOME / "Projects")):
+        if tail.is_dir():
+            for child in sorted(tail.iterdir()):
+                if child.is_dir() and not child.name.startswith("."):
+                    lanes[label] = child
+                    break
+    for label, path in (("Agents", HOME / "Agents"), ("Screenshots", HOME / "Pictures" / "Screenshots")):
+        if path.exists():
+            lanes[label] = path
+    # Omarchy setups: expose the config dir when present.
+    if (HOME / ".config" / "omarchy").is_dir():
+        lanes["Omarchy config"] = HOME / ".config" / "omarchy"
+    return lanes
 
 
 def _is_ignored(path: Path, root: Path) -> bool:
@@ -43,8 +59,8 @@ def _is_ignored(path: Path, root: Path) -> bool:
         rel = Path(path.name)
     for part in rel.parts:
         if part in IGNORED or part in {".cache", "node_modules", "__pycache__", ".git", ".venv", "venv"}:
-            # Never ignore the repo itself in Projects/duketopceo/home-index.
-            if part == "duketopceo" and rel.parts[0] == "Projects":
+            # Never ignore the repo itself under Projects/*/home-index.
+            if rel.parts[0] == "Projects" and "home-index" in rel.parts:
                 continue
             return True
     # Path-qualified entries (e.g. .local/share/Steam).
@@ -52,6 +68,22 @@ def _is_ignored(path: Path, root: Path) -> bool:
         if "/" in needle and rel.as_posix() == needle:
             return True
     return False
+
+
+def _redact(text: str) -> str:
+    """Scrub usernames/hostnames from any display string (filenames included)."""
+    import getpass
+    import socket
+    tokens = {getpass.getuser(), HOME.name, socket.gethostname()}
+    for token in sorted(tokens, key=len, reverse=True):
+        if token and len(token) >= 2:
+            text = text.replace(token, "<user>")
+    return text
+
+
+def _rel(entry: Path, root: Path) -> str:
+    """Home-relative label (no username/hostname leaks into the output)."""
+    return _redact(entry.relative_to(root).as_posix() + ("/" if entry.is_dir() else ""))
 
 
 def scan_root(root: Path, max_depth: int = 1) -> dict[str, list[str]]:
@@ -70,39 +102,43 @@ def scan_root(root: Path, max_depth: int = 1) -> dict[str, list[str]]:
         try:
             entries = sorted(current.iterdir(), key=lambda p: p.name)
         except OSError as e:
-            errors.append(f"{current}: {e}")
+            errors.append(f"{_rel(current, root)}: {e}")
             return
         for entry in entries:
-            name = entry.name
             if _is_ignored(entry, root):
                 continue
             if entry.is_symlink():
-                result.setdefault("Symlinks", []).append(
-                    f"{entry} -> {entry.readlink()}"
-                )
+                target = entry.readlink()
+                try:
+                    result.setdefault("Symlinks", []).append(
+                        f"{_rel(entry, root)} -> {target.relative_to(root)}"
+                    )
+                except ValueError:
+                    result.setdefault("Symlinks", []).append(f"{_rel(entry, root)} -> {target.name}")
                 continue
             if entry.is_dir():
                 try:
                     children = sorted(p.name for p in entry.iterdir())
                 except OSError as e:
                     children = []
-                    errors.append(f"{entry}: {e}")
-                # Dedupe: same realpath via Workers/repos symlinks counts once.
+                    errors.append(f"{_rel(entry, root)}: {e}")
                 real = str(entry.resolve())
                 if real in seen:
                     result.setdefault("Dirs", []).append(
-                        f"{entry}/ (already indexed; alias of {real})"
+                        f"{_rel(entry, root)} (already indexed; alias)"
                     )
                     continue
                 seen.add(real)
-                label = f"{entry}/ ({len(children)} entries)" + (
-                    f": {', '.join(children[:8])}" if children else ""
+                # children names can themselves embed usernames; redact them.
+                shown = _redact(", ".join(children[:8]))
+                label = f"{_rel(entry, root)} ({len(children)} entries)" + (
+                    f": {shown}" if children else ""
                 )
                 result.setdefault("Dirs", []).append(label)
                 if max_depth and depth < max_depth:
                     walk(entry, depth + 1)
             else:
-                result.setdefault("Files", []).append(str(entry))
+                result.setdefault("Files", []).append(_rel(entry, root))
 
     walk(root, 1)
     if errors:
@@ -110,18 +146,16 @@ def scan_root(root: Path, max_depth: int = 1) -> dict[str, list[str]]:
     return result
 
 
-def lane_report() -> list[str]:
+def lane_report(root: Path) -> list[str]:
     lines = []
-    for label, path in LANES.items():
-        if path.exists():
-            count = sum(1 for _ in path.iterdir())
-            lines.append(f"- {label}: `{path}` ({count} entries)")
-        else:
-            lines.append(f"- {label}: `{path}` (missing)")
+    for label, path in detect_lanes().items():
+        count = sum(1 for _ in path.iterdir())
+        # Never print the detected dir name (it can be a username).
+        lines.append(f"- {label}: `~/{label.replace(' ', '').lower()}/...` ({count} entries)")
     return lines
 
 
-def render_md(scan: dict[str, list[str]], stamp: str) -> str:
+def render_md(scan: dict[str, list[str]], stamp: str, root: Path) -> str:
     out = [
         "# INDEX — home file index",
         "",
@@ -129,7 +163,7 @@ def render_md(scan: dict[str, list[str]], stamp: str) -> str:
         "",
         "## Lanes",
         "",
-        *lane_report(),
+        *lane_report(root),
         "",
         "## Home root",
         "",
@@ -190,7 +224,7 @@ def main() -> int:
     scan = scan_root(HOME, max_depth=args.depth)
     stamp = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
     total = sum(len(v) for v in scan.values())
-    print(f"Scanned {HOME} depth {args.depth}: {total} entries.")
+    print(f"Scanned ~ depth {args.depth}: {total} entries.")
     for section, items in scan.items():
         print(f"  {section}: {len(items)}")
 
@@ -200,8 +234,8 @@ def main() -> int:
 
     if args.print:
         return 0
-    OUT_JSON.write_text(json.dumps({"generated": stamp, "scan": scan}, indent=2))
-    OUT_MD.write_text(render_md(scan, stamp))
+    OUT_JSON.write_text(json.dumps({"generated": stamp, "scan": scan}, indent=2, sort_keys=True))
+    OUT_MD.write_text(render_md(scan, stamp, HOME))
     print(f"Wrote {OUT_MD} and {OUT_JSON}")
     return 0
 
