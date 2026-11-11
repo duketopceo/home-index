@@ -1,0 +1,179 @@
+# INDEX — home file index
+
+Generated 2026-11-11T02:40:11-07:00 by `index.py` (script mode; see README.md).
+
+## Lanes
+
+- Work (Bartlett): `/home/lukekimball/Work/bartlett` (20 entries)
+- Personal (duketopceo): `/home/lukekimball/Projects/duketopceo` (2 entries)
+- Agents: `/home/lukekimball/Agents` (5 entries)
+- Screenshots: `/home/lukekimball/Pictures/Screenshots` (3 entries)
+
+## Home root
+
+### Dirs
+
+- .1password/ (1 entries): agent.sock
+- .agent-browser/ (1 entries): browsers
+- .agent-zero/ (2 entries): .env, session_cookies.json
+- .agents/ (7 entries): .skill-lock.json, AGENTS.md, DEVCONTAINERS.md, INDEX.md, mcp, plugins, skills
+- .agy/ (2 entries): mcp.json, mcp.json.bak-20261102
+- .aitk/ (4 entries): 20260921-82730-ext.log, 20260921-82730-tracing.log, evals, models
+- .argus/ (1 entries): spend.ndjson
+- .augment/ (2 entries): hooks, settings.json
+- .browserclaw/ (19 entries): analytics.json, analytics.json.lock, audit-retention.json, browserclaw.sqlite, browserclaw.sqlite-shm, browserclaw.sqlite-wal, browserclaw.sqlite.bak-20261107-000412, first-run-connect.json
+- .browseros/ (9 entries): acpx-state, cache, db, installation.json, mcp-manager, server.json, sessions, tool-output
+- .claude/ (51 entries): .credentials.json, .jev-compact, .last-cleanup, CLAUDE.md, CLAUDE.md.bak, CLAUDE.md.bak-dell-2026-11-04, CLAUDE.md.tmp, backups
+- .cline/ (1 entries): hooks
+- .cloudflared/ (1 entries): cert.pem
+- .codeium/ (1 entries): windsurf
+- .coderabbit/ (6 entries): auth.json, doctor.json, logs, machine-id, reviews, stats.json
+- .codex/ (71 entries): .ai-usagebar-codex-credentials.lock, .codex-global-state.json, .codex-global-state.json.bak, .hook-trust, .sandbox_migration, .sqlite-maintenance.lock, .tmp, AGENTS.md
+- .codex-personal/ (23 entries): .sandbox_migration, .tmp, config.toml, goals_1.sqlite, goals_1.sqlite-shm, goals_1.sqlite-wal, installation_id, logs_2.sqlite
+- .codex-work/ (25 entries): .sandbox_migration, .tmp, config.toml, goals_1.sqlite, goals_1.sqlite-shm, goals_1.sqlite-wal, installation_id, logs_2.sqlite
+- .composio/ (15 entries): acp-adapters, analytics.json, composio, config.json, local-tools-binaries, pending-login-session.json, release-tag.txt, run-helpers-runtime.mjs
+- .config/ (171 entries): .wrangler, 1Password, @openwork, Antigravity, BraveSoftware, Claude, Code, Codex
+- .copilot/ (17 entries): .mcp-writer.binding, .mcp-writer.lock, chats, config.json, hooks, ide, installed-plugins, installed-plugins.lock
+- .cua-driver/ (8 entries): .installation_recorded, .release_installed, .telemetry_id, .telemetry_identity.lock, .telemetry_lifecycle.lock, config.json, packages, version_check.json
+- .cups/ (1 entries): lpoptions
+- .cursor/ (34 entries): .cursorrules, .gitignore, AGENTS.md, CLAUDE.md, DROID.md, agent-cli-state.json, agents, ai-tracking
+- .devin/ (5 entries): AGENTS.md, config.local.json, mcp_config.local.json, mcp_config.local.json.bak-mcp-clean, skills
+- .docker/ (4 entries): .token_seed, .token_seed.lock, buildx, cli-plugins
+- .dotnet/ (35 entries): .workloadAdvertisingManifestSentinel8.0.400, .workloadAdvertisingUpdates8.0.400, 10.0.400.aspNetCertificateSentinel, 10.0.400.dotnetFirstUseSentinel, 10.0.400.toolpath.sentinel, 10.0.400_IsDockerContainer.dotnetUserLevelCache, 10.0.400_MachineId.dotnetUserLevelCache, 10.0.403.aspNetCertificateSentinel
+- .factory/ (38 entries): artifacts, attention-outbox, auth.v2.keyring, bin, cache, certs, crons, exit-spool
+- .funes/ (9 entries): agents, index-coverage-old-unindexed.json, index-coverage.json, install-id, memory, memory-old-unindexed, spool, state-old-unindexed.json
+- .gemini/ (18 entries): antigravity, antigravity-cli, cache, config, extension_integrity.json, extensions, google_accounts.json, history
+- .gnupg/ (5 entries): common.conf, crls.d, private-keys-v1.d, public-keys.d, trustdb.gpg
+- .grok/ (42 entries): .config-init.lock, .metadata_version, CHANGELOG.json, CHANGELOG.md, README.md, active_sessions.json, active_sessions.lock, agent_id
+- .grokbot/ (7 entries): .grokbot-data-root-v1, attachment-staging, local-exec-backend-return.json, local-exec-daemon.json, local-exec-daemon.log, local-exec-supervisor.json, settings.json
+- .hermes/ (86 entries): .backup.lock, .env, .env.bak-20261001-114129, .env.lock, .hermes-update-in-progress.lock, .hermes-update-result.json, .hermes_history, .install_id.lock
+- .hermes-personal/ (12 entries): .update_check, SOUL.md, audio_cache, cache, cron, hooks, image_cache, logs
+- .hermes-work/ (12 entries): .update_check, SOUL.md, audio_cache, cache, cron, hooks, image_cache, logs
+- .java/ (1 entries): .userPrefs
+- .junie/ (1 entries): config.json
+- .kimi-code/ (2 entries): config.toml, hooks
+- .kiro/ (1 entries): hooks
+- .local/ (9 entries): aws-cli, bin, google-cloud-sdk, include, lib, opt, share, src
+- .mem0/ (1 entries): config.json
+- .nuget/ (2 entries): NuGet, packages
+- .numbat/ (2 entries): records.ndjson, state.db
+- .nv/ (1 entries): ComputeCache
+- .omp/ (5 entries): agent, gpu_cache.json, logs, natives, run
+- .openclaw/ (1 entries): extensions
+- .opencodereview/ (1 entries): sessions
+- .openwork/ (2 entries): bootstrap, openwork-server
+- .orb-cli/ (1 entries): config.json
+- .orca/ (1 entries): agent-hooks
+- .ori/ (20 entries): .gitignore, claude-secure-storage, claude-secure-storage-v2, code-daemon, codex, config.json, credentials.json, daemon
+- .paperclip/ (2 entries): cli, instances
+- .perplexity/ (1 entries): run
+- .pi/ (1 entries): agent
+- .pki/ (1 entries): nssdb
+- .pplx/ (2 entries): config.toml, users
+- .pytest_cache/ (4 entries): .gitignore, CACHEDIR.TAG, README.md, v
+- .qwen/ (3 entries): hooks, settings.json, settings.json.bak-neo-2026-11-06
+- .railway/ (17 entries): agent-state.json, auto-update.log, backups, bin, config.json, config.lock, env, env.fish
+- .ssh/ (22 entries): 1Password, agent, authorized_keys, authorized_keys.bak-heeler-2026-11-05, config, config.bak.1788837742, config.bak.1793432282, id_ed25519
+- .supabase/ (2 entries): telemetry.json, traces
+- .swiftpm/ (3 entries): cache, configuration, security
+- .venvs/ (1 entries): mlx-collect
+- .vim/ (0 entries)
+- .vscode-ext-backups/ (3 entries): extensions-20260921T004618.txt, extensions-20260921T005428.txt, extensions-20260921T005645.txt
+- .vscode-shared/ (1 entries): sharedStorage
+- .wrangler/ (5 entries): cache, cloudflare-skills-repo-cache.json, logs, metrics.json, registry
+- Agents/ (5 entries): agents-legacy, runs, shots, terminals, tools
+- Applications/ (11 entries): INDEX.md, agent-zero, browseros-neo, cursor-3.24.18, cursor-3.27.12, cursor-3.29.15, dim-agent, fincept-terminal
+- Archive/ (17 entries): INDEX.md, OpenWork Chat, agent-tools, archives, binaries, cube-sandbox-one-click-v0.7.2-arm64, documents, git-stub
+- Documents/ (18 entries): ChatGPT, Default Project, INDEX.md, Last30Days, Obsidian Vault, argus-launch, blender, game-mods-prep
+- Downloads/ (42 entries): .omarchy-taildrop, 2026-11-10_rl_company_products.csv, 4abby.csv, Archives, Bartlett, Cloudflare_Duketopceo@gmail.com's Account_SecurityInsights_20261011_0141.csv, Documents, IMG_3257.png
+- Inbox/ (1 entries): claude
+- Library/ (2 entries): Application Support, INDEX.md
+- Logs/ (0 entries)
+- Pictures/ (5 entries): INDEX.md, Pics, Screenshots, orchestral, test-panel.png
+- Projects/ (1 entries): duketopceo
+- ROMs/ (33 entries): 3DO, Amiga, Arcade, Atari2600, Atari800, C64, CaveStory, DOS
+- Temp/ (1 entries): UnityLockfile
+- Unity user templates/ (0 entries)
+- UserSettings/ (0 entries)
+- Videos/ (3 entries): INDEX.md, Screen Recordings, gopro
+- Wallpapers/ (2 entries): Aether, INDEX.md
+- Work/ (1 entries): bartlett
+- actions-runner-oc/ (14 entries): .env, .path, _diag, _work, bin, config.sh, env.sh, externals
+- backups/ (3 entries): omaseal-backup.sh, omaseal.omaseal-backup, openbot
+- bin/ (75 entries): INDEX.md, __pycache__, agent-work, app-versions, asudo, audioswitch, blip-bridged, blip-shim
+- device-move-bundles/ (4 entries): cubesandbox.bundle, kurultai-private.bundle, omarchy-browser-ideation-stash.bundle, wisp-wip-branches-2026-10-28.bundle
+- go/ (2 entries): INDEX.md, pkg
+- job-applications/ (2 entries): INDEX.md, Luke-Kimball-Resume-Applied-AI.pdf
+- lib/ (1 entries): retroarch
+- models/ (4 entries): INDEX.md, ornith-35b, qwen3-4b-instruct-q4km.gguf, ui-tars
+- nucleares-re/ (6 entries): .agentflow, RESEARCH.md, decompiled, file-inventory.txt, sections, workflows
+- scripts/ (4 entries): INDEX.md, link-agent-skills.sh, luke-index-watcher.py, retarget-home-paths.sh
+- security-audit-20261109-195920/ (17 entries): 01-inventory.txt, 02-integrity.txt, 03-persistence.txt, 04-network-listeners.txt, 05-listeners-owners.txt, 06-malware-indicators.txt, 07-processes-provenance.txt, 08-provenance-map.txt
+- shots/ (2 entries): gmail, perplexity
+- src/ (4 entries): Vulkan-Headers, kate-ios-topics, llama.cpp, project-nimbus
+- tmp/ (1 entries): open-code-review-scratch
+- tools/ (3 entries): blender, unity, unityhub
+- vms/ (9 entries): INDEX.md, Windows11_Client_arm64_en-us_26300_9457.iso, iso, unattend, unattend.iso, virtio-win.iso, win11-arm.qcow2, win11-desktop.sh
+
+### Files
+
+- .XCompose
+- .app-review-join-url
+- .bash_history
+- .bash_logout
+- .bash_profile
+- .bashrc
+- .bashrc.local
+- .claude.json
+- .claude.json.bak-20261109-prelx
+- .claude.json.bak-browseros-relay
+- .claude.json.rea.backup
+- .gitconfig
+- .npmrc
+- .profile
+- .viminfo
+- .viminfo.tmp
+- .wget-hsts
+- AGENTS.md
+- AGENTS.md.bak-dell-2026-11-04
+- FilmCraft – Demo Project.fcproj
+- INDEX.md
+- PR-body.md
+- SSH-RUNBOOK.md
+- Unity_v6000.5.11f1.alf
+- capture-pose.patch
+- ci-local.log
+- edit_checkcaps.py
+- edit_docs.py
+- edit_glow2.py
+- edit_review1.py
+- edit_review2.py
+- feature-site-guiding-light.bundle
+- interleave.sh
+- mkmeta.sh
+- omarchy-m-test-ports.json
+- omarchy-m-test-report-aurora.json
+- omarchy-m-test-report.asahi-baseline.json
+- omarchy-m-test-report.json
+- pr2-body.md
+- run1.txt
+- runcap.sh
+- servicetitan-business-units.html
+- steam-1466860.log
+- steam-install-url.log
+- steam-launch.log
+- steam-launch2.log
+- steam-launch3.log
+- steam-url2.log
+- terminal-output-design.patch
+- tui-push.tgz
+- unity-compile.log
+- winjob-base.out
+- wordink-hammer-runbook.md
+- ydotoold.log
+
+### Symlinks
+
+- .cursorrules -> /home/lukekimball/Documents/github/personal/luke-agents/.cursorrules
+- .steampath -> /home/lukekimball/.steam/sdk32/steam
+- .steampid -> /home/lukekimball/.steam/steam.pid
