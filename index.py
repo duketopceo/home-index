@@ -20,9 +20,11 @@ OUT_MD = Path(__file__).resolve().parent / "INDEX.md"
 OUT_JSON = Path(__file__).resolve().parent / "index.json"
 
 IGNORED = {
-    ".cache", ".cargo", ".local/share/Steam", "node_modules", ".venv",
-    "__pycache__", ".git", ".local/share/dayflow", ".npm", ".rustup",
+    ".cache", ".cargo", "Steam", "node_modules", ".venv", "venv",
+    "__pycache__", ".git", "dayflow", ".npm", ".rustup",
     ".bun", ".var", ".mozilla", ".vscode", ".steam", ".ollama",
+    "pnpm", "mise", ".local/share/pnpm", ".local/share/mise",
+    ".local/share/Steam", "Library", "Pictures/Screenshots/Library",
 }
 MAX_DEPTH = 4
 LANES = {
@@ -33,28 +35,78 @@ LANES = {
 }
 
 
-def scan_root(root: Path) -> dict[str, list[str]]:
-    """Map top-level entries to one-line summaries (no content reads)."""
+def _is_ignored(path: Path, root: Path) -> bool:
+    """Ignored if any path part matches a cached/generated dir name."""
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        rel = Path(path.name)
+    for part in rel.parts:
+        if part in IGNORED or part in {".cache", "node_modules", "__pycache__", ".git", ".venv", "venv"}:
+            # Never ignore the repo itself in Projects/duketopceo/home-index.
+            if part == "duketopceo" and rel.parts[0] == "Projects":
+                continue
+            return True
+    # Path-qualified entries (e.g. .local/share/Steam).
+    for needle in IGNORED:
+        if "/" in needle and rel.as_posix() == needle:
+            return True
+    return False
+
+
+def scan_root(root: Path, max_depth: int = 1) -> dict[str, list[str]]:
+    """Walk root to max_depth, never following symlinked dirs (no double count).
+
+    - max_depth=1: old behavior (root children only, 8-child summaries).
+    - max_depth>=2: recursive dir counts + first-8 children per dir.
+    No content reads. Symlink loops are impossible (links are listed,
+    never descended). Permission errors are collected, not raised.
+    """
     result: dict[str, list[str]] = {}
-    for entry in sorted(root.iterdir(), key=lambda p: p.name):
-        name = entry.name
-        if name in IGNORED:
-            continue
-        if entry.is_symlink():
-            result.setdefault("Symlinks", []).append(
-                f"{name} -> {entry.readlink()}"
-            )
-        elif entry.is_dir():
-            try:
-                children = sorted(p.name for p in entry.iterdir())
-            except OSError:
-                children = []
-            result.setdefault("Dirs", []).append(
-                f"{name}/ ({len(children)} entries)" +
-                (f": {', '.join(children[:8])}" if children else "")
-            )
-        else:
-            result.setdefault("Files", []).append(name)
+    errors: list[str] = []
+    seen: set[str] = set()  # realpaths already descended
+
+    def walk(current: Path, depth: int) -> None:
+        try:
+            entries = sorted(current.iterdir(), key=lambda p: p.name)
+        except OSError as e:
+            errors.append(f"{current}: {e}")
+            return
+        for entry in entries:
+            name = entry.name
+            if _is_ignored(entry, root):
+                continue
+            if entry.is_symlink():
+                result.setdefault("Symlinks", []).append(
+                    f"{entry} -> {entry.readlink()}"
+                )
+                continue
+            if entry.is_dir():
+                try:
+                    children = sorted(p.name for p in entry.iterdir())
+                except OSError as e:
+                    children = []
+                    errors.append(f"{entry}: {e}")
+                # Dedupe: same realpath via Workers/repos symlinks counts once.
+                real = str(entry.resolve())
+                if real in seen:
+                    result.setdefault("Dirs", []).append(
+                        f"{entry}/ (already indexed; alias of {real})"
+                    )
+                    continue
+                seen.add(real)
+                label = f"{entry}/ ({len(children)} entries)" + (
+                    f": {', '.join(children[:8])}" if children else ""
+                )
+                result.setdefault("Dirs", []).append(label)
+                if max_depth and depth < max_depth:
+                    walk(entry, depth + 1)
+            else:
+                result.setdefault("Files", []).append(str(entry))
+
+    walk(root, 1)
+    if errors:
+        result["Errors"] = errors
     return result
 
 
@@ -131,12 +183,14 @@ def main() -> int:
     ap.add_argument("--print", action="store_true", help="Print stats only.")
     ap.add_argument("--llm", action="store_true", help="Also classify names via OpenRouter ZDR.")
     ap.add_argument("--yes", action="store_true", help="Skip llm confirmation.")
+    ap.add_argument("--depth", type=int, default=3, choices=(1, 3),
+                    help="Scan depth: 1=root only (default pre-v0.2), 3=+3 levels (default).")
     args = ap.parse_args()
 
-    scan = scan_root(HOME)
+    scan = scan_root(HOME, max_depth=args.depth)
     stamp = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
     total = sum(len(v) for v in scan.values())
-    print(f"Scanned {HOME}: {total} root entries.")
+    print(f"Scanned {HOME} depth {args.depth}: {total} entries.")
     for section, items in scan.items():
         print(f"  {section}: {len(items)}")
 
